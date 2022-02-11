@@ -1,17 +1,18 @@
-import { useEffect, useRef, useState, MouseEvent } from 'react';
+import { useEffect, useRef, useState, MouseEvent, ChangeEvent } from 'react';
 
+import { loadImage } from 'utils/loadImage';
 import { canvasToBlobUrl } from 'utils/canvasToBlobUrl';
 
 interface ICanvasProps {
   size: number;
-  selectedFile: HTMLImageElement | null;
 }
 
-function Canvas({ size, selectedFile }: ICanvasProps) {
-  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+function Canvas({ size }: ICanvasProps) {
+  const [isDrawing, setIsDrawing] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<HTMLImageElement | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
 
   useEffect(() => {
     if (ctxRef.current) {
@@ -50,6 +51,14 @@ function Canvas({ size, selectedFile }: ICanvasProps) {
       );
     }
   }, [ctxRef, selectedFile]);
+
+  const onFileChange = async ({ target: { files } }: ChangeEvent<HTMLInputElement>) => {
+    const url = (files && URL.createObjectURL(files[0])) || '';
+
+    const img = await loadImage(url);
+
+    setSelectedFile(img);
+  };
 
   const startDrawing = ({ nativeEvent }: MouseEvent) => {
     const { offsetX, offsetY } = nativeEvent;
@@ -103,8 +112,9 @@ function Canvas({ size, selectedFile }: ICanvasProps) {
         onMouseUp={finishDrawing}
         onMouseDown={startDrawing}
       />
-      <button onClick={handleUploadImage}>Upload Image</button>
-      <button onClick={handleClearCanvas}>Clear Canvas</button>
+      <input type="file" onChange={onFileChange} />
+      <button onClick={handleUploadImage}>Upload image</button>
+      <button onClick={handleClearCanvas}>Clear canvas</button>
     </div>
   );
 }
