@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState, ChangeEvent } from 'react';
 
-function App() {
+import { loadImage } from 'utils/loadImage';
+
+import Canvas from 'Section/Canvas';
+
+import './index.css';
+
+export default function App() {
+  const [size, setSize] = useState<number>(5);
+  const [selectedFile, setSelectedFile] = useState<HTMLImageElement | null>(null);
+
+  const handleSizeChange = (size: number): void => {
+    setSize(prevSize => (prevSize || size > 0 ? prevSize + size : 0));
+  };
+
+  const onFileChange = async ({ target: { files } }: ChangeEvent<HTMLInputElement>) => {
+    const url = (files && URL.createObjectURL(files[0])) || '';
+
+    const img = await loadImage(url);
+
+    setSelectedFile(img);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type="file" onChange={onFileChange} />
+      <Canvas size={size} selectedFile={selectedFile} />
+      <div className="btn-block">
+        <button onClick={() => handleSizeChange(-1)}>-1</button>
+        <span>{size}</span>
+        <button onClick={() => handleSizeChange(1)}>+1</button>
+      </div>
     </div>
   );
 }
-
-export default App;

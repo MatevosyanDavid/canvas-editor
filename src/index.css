@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.btn-block > button {
+  background: #0d6efd;
+  border: none;
+  margin: 5px;
+  color: #fff;
+  border-radius: 3px;
+}
