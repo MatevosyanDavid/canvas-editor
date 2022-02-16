@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, MouseEvent, ChangeEvent } from 'react';
+import { useEffect, useRef, useState, MouseEvent, ChangeEvent, useCallback } from 'react';
 
 import { loadImage } from 'utils/loadImage';
 import { canvasToBlobUrl } from 'utils/canvasToBlobUrl';
