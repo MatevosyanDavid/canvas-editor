@@ -42,9 +42,16 @@ function Canvas({ size }: ICanvasProps) {
 
   useEffect(() => {
     if (canvasRef.current && ctxRef.current && selectedFile) {
+      const canvas = canvasRef.current;
+
+      const canvasPartWidth = canvas.width / 2;
+      const selectedFilePartWidth = selectedFile.width / 2;
+
       ctxRef.current.drawImage(
         selectedFile,
-        0,
+        selectedFilePartWidth > canvasPartWidth
+          ? canvasPartWidth - selectedFilePartWidth
+          : selectedFilePartWidth - canvasPartWidth,
         0,
         canvasRef.current.width,
         canvasRef.current.height,
