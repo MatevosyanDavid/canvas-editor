@@ -1,24 +1,19 @@
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Canvas from 'Section/Canvas';
+import Paint from 'Pages/Paint';
+
+import { routes } from 'Routes';
 
 import './index.css';
 
 export default function App() {
-  const [size, setSize] = useState<number>(5);
-
-  const handleSizeChange = (size: number): void => {
-    setSize(prevSize => (prevSize || size > 0 ? prevSize + size : 0));
-  };
-
   return (
-    <div className="App">
-      <Canvas size={size} />
-      <div className="btn-block">
-        <button onClick={() => handleSizeChange(-1)}>-1</button>
-        <span>{size}</span>
-        <button onClick={() => handleSizeChange(1)}>+1</button>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {routes.map(({ path, element: Element }) => (
+          <Route key={path} path={path} element={<Element />} />
+        ))}
+      </Routes>
+    </BrowserRouter>
   );
 }
